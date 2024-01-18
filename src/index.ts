@@ -69,14 +69,14 @@ interface VerifyHOTPOptions {
  */
 interface GenerateURLOptions {
   /**
+   * The name of the user's account.
+   */
+  account: string;
+
+  /**
    * The issuer of the 2FA.
    */
   issuer?: string;
-
-  /**
-   * The name of the user's account.
-   */
-  account?: string;
 }
 
 /**
@@ -93,14 +93,14 @@ interface GenerateQRCodeOptions {
    */
   urlOptions?: {
     /**
-     * The issuer of the 2FA.
-     */
-    issuer?: string;
-
-    /**
      * The name of the user's account.
      */
     account?: string;
+
+    /**
+     * The issuer of the 2FA.
+     */
+    issuer?: string;
   };
 
   /**
@@ -212,17 +212,17 @@ const verifyHOTP = (
  * @param options The options to use when generating the URL.
  * @returns A string representing the generated URL.
  */
-const generateURL = (seed: string, options?: GenerateURLOptions) => {
+const generateURL = (seed: string, options: GenerateURLOptions) => {
   const encodedSeed = base32.encode(seed).replace(/=/g, '');
 
   let url = 'otpauth://totp/';
-  if (options?.issuer) {
-    url += '?issuer=' + encodeURIComponent(options.issuer);
-  }
   if (options?.account) {
     url += encodeURIComponent(options.account);
   }
-  url += '&secret=' + encodeURIComponent(encodedSeed);
+  url += '?secret=' + encodeURIComponent(encodedSeed);
+  if (options?.issuer) {
+    url += '&issuer=' + encodeURIComponent(options.issuer);
+  }
 
   return url;
 };
@@ -237,16 +237,30 @@ const generateQRCode = async (options: GenerateQRCodeOptions) => {
     throw new Error('You must provide either a seed or a URL.');
 
   if (options.url) return await qr.toDataURL(options.url);
-  else
+  else {
+    if (!options.urlOptions?.account)
+      throw new Error(
+        'You are using seed to generate a QR code, but there is no account field present in the URL options.'
+      );
     return await qr.toDataURL(
       generateURL(options.seed!, {
-        issuer: options.urlOptions?.issuer,
-        account: options.urlOptions?.account
+        account: options.urlOptions.account,
+        issuer: options.urlOptions.issuer
       })
     );
+  }
 };
 
 export {
+  generateSeed,
+  generateCode,
+  verifyTOTP,
+  verifyHOTP,
+  generateURL,
+  generateQRCode
+};
+
+export default {
   generateSeed,
   generateCode,
   verifyTOTP,

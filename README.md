@@ -133,9 +133,9 @@ else console.log('The code is invalid!');
 **Parameters**:
 
 - `seed`: The seed to generate the URL from.
-- `options?`: The options to use when generating the URL.
+- `options`: The options to use when generating the URL.
+  - `account`: The name of the user's account.
   - `issuer?`: The issuer of the 2FA.
-  - `account?`: The name of the user's account.
 
 **Returns**: A string representing the generated URL.
 
@@ -143,8 +143,8 @@ else console.log('The code is invalid!');
 
 ```ts
 const url = tfa.generateURL(seed, {
-  issuer: 'Discord',
-  account: 'example@example.org'
+  account: 'example@example.org',
+  issuer: 'Discord'
 });
 ```
 
@@ -157,8 +157,8 @@ const url = tfa.generateURL(seed, {
 - `options?`: The options to use when generating the QR code.
   - `seed?`: The seed to generate the QR code from.
   - `urlOptions?`: The options to use when generating a URL, if the seed is provided.
-    - `issuer?`: The issuer of the 2FA.
     - `account?`: The name of the user's account.
+    - `issuer?`: The issuer of the 2FA.
   - `url?`: The URL to generate the QR code from.
 
 **Returns**: A string representing the generated QR code.
