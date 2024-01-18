@@ -89,14 +89,19 @@ interface GenerateQRCodeOptions {
   seed?: string;
 
   /**
-   * The issuer of the 2FA.
+   * The options to use when generating a URL, if the seed is provided.
    */
-  issuer?: string;
+  urlOptions?: {
+    /**
+     * The issuer of the 2FA.
+     */
+    issuer?: string;
 
-  /**
-   * The name of the user's account.
-   */
-  account?: string;
+    /**
+     * The name of the user's account.
+     */
+    account?: string;
+  };
 
   /**
    * The URL to generate the QR code from.
@@ -202,7 +207,7 @@ const verifyHOTP = (
 };
 
 /**
- * Generates a URL for a QR code that can be scanned into an authenticator app.
+ * Generates a URL from a seed. This URL is later used to generate a QR code.
  * @param seed The seed to generate the URL from.
  * @param options The options to use when generating the URL.
  * @returns A string representing the generated URL.
@@ -235,8 +240,8 @@ const generateQRCode = async (options: GenerateQRCodeOptions) => {
   else
     return await qr.toDataURL(
       generateURL(options.seed!, {
-        issuer: options.issuer,
-        account: options.account
+        issuer: options.urlOptions?.issuer,
+        account: options.urlOptions?.account
       })
     );
 };

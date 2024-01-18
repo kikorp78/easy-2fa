@@ -128,7 +128,7 @@ else console.log('The code is invalid!');
 
 ## `generateURL()`
 
-**Description**: Generates a URL for a QR code that can be scanned into an authenticator app.
+**Description**: Generates a URL from a seed. This URL is later used to generate a QR code.
 
 **Parameters**:
 
@@ -154,10 +154,11 @@ const url = tfa.generateURL(seed, {
 
 **Parameters**:
 
-- `options?`: The options to use when generating the URL.
+- `options?`: The options to use when generating the QR code.
   - `seed?`: The seed to generate the QR code from.
-  - `issuer?`: The issuer of the 2FA.
-  - `account?`: The name of the user's account.
+  - `urlOptions?`: The options to use when generating a URL, if the seed is provided.
+    - `issuer?`: The issuer of the 2FA.
+    - `account?`: The name of the user's account.
   - `url?`: The URL to generate the QR code from.
 
 **Returns**: A string representing the generated QR code.
