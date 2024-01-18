@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/package.json",
   "name": "easy-2fa",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A lightweight npm package for generation and verification of 2FA codes.",
   "license": "MIT",
   "scripts": {
